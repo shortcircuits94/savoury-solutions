@@ -11,6 +11,7 @@ import RecipeDetails from "./Pages/RecipeDetails/RecipeDetails";
 import Favourites from "./Pages/Favourites/Favourites";
 import "./App.scss";
 import Header from "./Components/Header/Header";
+import Footer from "./Components/Footer/Footer";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/recipe/:id" element={<RecipeDetails />} />
           <Route path="/favourites" element={<Favourites />} />
         </Routes>
+        <Footer />
       </Router>
     </>
   );

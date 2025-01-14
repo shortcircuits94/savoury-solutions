@@ -35,16 +35,13 @@
         font-size: 1rem;
         color: $primary;
         font-weight: bold;
-        background-color: $accent; /* Matching the background color of search button */
-        border-radius: 20px; /* Similar to the search button */
+        background-color: $accent;
+        border-radius: 20px;
         text-decoration: none;
         text-align: center;
 
         &:hover {
-          background-color: darken(
-            $accent,
-            10%
-          ); /* Slightly darken the color on hover */
+          background-color: darken($accent, 10%);
         }
       }
     }
@@ -58,7 +55,7 @@
     max-width: 300px;
     @include tablet {
       flex: 1;
-      text-align: left; /* Center logo on tablet and above */
+      text-align: left;
     }
     & img {
       max-width: 300px;
@@ -112,18 +109,18 @@
     align-items: center;
 
     .header__menu-toggle {
-      display: none; /* Hide hamburger menu on tablet and above */
+      display: none;
     }
 
     .header__nav {
       display: flex;
-      justify-content: flex-end; /* Align nav items to the right */
+      justify-content: flex-end;
       flex: 1;
     }
 
     .header__logo {
-      text-align: left; /* Center logo on tablet */
-      flex: 1; /* Allow logo to take center position */
+      text-align: left;
+      flex: 1;
       & img {
         max-width: 300px;
       }
@@ -135,12 +132,12 @@
       color: $background;
       font-weight: bold;
       text-decoration: none;
-      background-color: $accent; /* Matching the background color of search button */
-      border-radius: 20px; /* Similar to the search button */
-      margin-left: 1rem; /* Space between the links */
+      background-color: $accent;
+      border-radius: 20px;
+      margin-left: 1rem;
 
       &:hover {
-        background-color: darken($accent, 10%); /* Darken the accent on hover */
+        background-color: darken($accent, 10%);
       }
     }
   }

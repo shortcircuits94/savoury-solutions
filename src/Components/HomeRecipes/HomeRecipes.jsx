@@ -33,7 +33,7 @@ const HomeRecipes = ({ recipes, isFiltered }) => {
             </div>
           ))
         ) : (
-          <p>No recipes to display</p>
+          <p className="home-recipes__none">No recipes to display</p>
         )}
       </div>
     </div>

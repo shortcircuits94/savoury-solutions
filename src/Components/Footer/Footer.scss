@@ -1,0 +1,39 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/fonts" as *;
+@use "../../Styles/Partials/mixins" as *;
+
+.footer {
+  padding: 2rem;
+  background-color: $primary;
+  color: $secondary;
+  text-align: center;
+
+  .footer__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .footer__text {
+      font-size: 1rem;
+      color: $text;
+      margin-bottom: 1rem;
+    }
+  }
+
+  /* Tablet and Above */
+  @include tablet {
+    .footer__content {
+      flex-direction: row;
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  /* Desktop and Above */
+  @include desktop {
+    padding: 3rem;
+    .footer__link {
+      font-size: 1.1rem;
+    }
+  }
+}
