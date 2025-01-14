@@ -76,7 +76,7 @@ Favourites page with saved recipes.
 
 Ingredients: List of user-inputted ingredients.
 
-Recipes: Data from the BigOven API, including name, ingredients, instructions, preparation time, and dietary information.
+Recipes: Data from the MealDB, including name, ingredients, instructions, preparation time, and dietary information.
 
 Users: User data for saved recipes and preferences.
 
@@ -144,5 +144,3 @@ Custom Recipe Submission: Let users add their own recipes to the database.
 
 notes:
 dont prioritize Authentication if it goes well I can add it
-
-(image.png)
