@@ -54,9 +54,7 @@ A database to store user preferences and saved recipes.
 
 ### Sitemap
 
-Home Page: Welcome message and ingredient input form.
-
-Recipe Results: List of recipes based on selected ingredients.
+Home Page: Welcome message and ingredient input form and recipe results.
 
 Recipe Details: Detailed view of a selected recipe.
 
@@ -146,3 +144,5 @@ Custom Recipe Submission: Let users add their own recipes to the database.
 
 notes:
 dont prioritize Authentication if it goes well I can add it
+
+(image.png)
