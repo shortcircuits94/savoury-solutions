@@ -11,6 +11,18 @@
   background-image: url("../../assets/Images/background.jpg");
   background-size: cover;
   background-position: center;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+  }
   @include tablet {
     padding: 2.5rem 0;
   }
@@ -36,6 +48,9 @@
     padding: 0.5rem 0.75rem;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 30px;
+    @include tablet {
+      width: 50%;
+    }
   }
 
   &__search-input {

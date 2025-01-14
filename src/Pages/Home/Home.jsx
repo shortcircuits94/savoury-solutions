@@ -9,6 +9,7 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
+  const [randomRecipes, setRandomRecipes] = useState([]); // Store multiple random recipes
   const [categories, setCategories] = useState([]);
   const [isFiltered, setIsFiltered] = useState(false);
 
@@ -24,7 +25,25 @@ const Home = () => {
         );
       })
       .catch((error) => console.error("Error fetching categories:", error));
+
+    // Fetch 6 random recipes when the page loads
+    fetchRandomRecipes();
   }, []);
+
+  const fetchRandomRecipes = () => {
+    // Make 6 separate API calls to get random recipes
+    const randomRecipeRequests = Array.from({ length: 6 }, () =>
+      axios.get("https://www.themealdb.com/api/json/v1/1/random.php")
+    );
+
+    // Use Promise.all to fetch all random recipes at once
+    Promise.all(randomRecipeRequests)
+      .then((responses) => {
+        const recipes = responses.map((response) => response.data.meals[0]);
+        setRandomRecipes(recipes); // Store 6 random recipes
+      })
+      .catch((error) => console.error("Error fetching random recipes:", error));
+  };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -40,17 +59,16 @@ const Home = () => {
     const updatedTags = selectedTags.filter((t) => t !== tag);
     setSelectedTags(updatedTags);
     if (updatedTags.length === 0) {
-      setFilteredRecipes([]); // Reset to no recipes if no tags left
-      setIsFiltered(false); // No filter applied
+      setFilteredRecipes([]);
+      setIsFiltered(false);
     } else {
-      filterRecipesByTags(updatedTags); // Filter recipes by the remaining tags
+      filterRecipesByTags(updatedTags);
     }
   };
 
   const filterRecipesByTags = (tags) => {
     let filtered = [];
     if (tags.length > 0) {
-      // Filter logic based on tags goes here
       filtered = filtered.filter((recipe) =>
         tags.every((tag) => recipe.tags.includes(tag))
       );
@@ -101,6 +119,11 @@ const Home = () => {
         categories={categories}
         onCategorySelect={handleCategorySelect}
       />
+
+      {/* Display 6 random recipes */}
+      {!isFiltered && randomRecipes.length > 0 && (
+        <HomeRecipes recipes={randomRecipes} />
+      )}
 
       {/* Show filtered recipes */}
       <HomeRecipes recipes={filteredRecipes} />

@@ -1,0 +1,89 @@
+@use "../../styles/partials/variables" as *;
+
+.recipe-details {
+  padding: 1rem;
+
+  &__title {
+    font-size: 2.5rem;
+    color: $primary;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    border-radius: 10px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    text-transform: capitalize;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__image {
+    flex: 1;
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+  }
+
+  &__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 5px solid $secondary;
+    border-radius: 10px;
+    background-color: $background;
+    padding: 20px;
+    .recipe-details__ingredients {
+      list-style-type: none;
+      padding: 0;
+      margin: 10px 0;
+
+      li {
+        background-color: $background;
+        padding: 8px;
+        margin: 5px 0;
+        border-radius: 5px;
+        font-size: 1rem;
+        color: $text;
+        text-transform: capitalize;
+
+        @media (min-width: 768px) {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+
+  &__instructions {
+    margin-top: 20px;
+    margin: 20px;
+    padding: 20px;
+    border: 5px solid $secondary;
+    border-radius: 10px;
+    background-color: $background;
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    p {
+      line-height: 1.5;
+      margin-bottom: 10px;
+      @media (min-width: 768px) {
+        font-size: 1.2rem;
+      }
+    }
+  }
+}

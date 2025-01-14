@@ -8,6 +8,7 @@ const HomeHeader = ({
   onTagRemove,
   categories,
   onCategorySelect,
+  randomRecipe,
 }) => {
   return (
     <div className="home-header">
