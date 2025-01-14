@@ -1,0 +1,154 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/fonts" as *;
+@use "../../Styles/Partials/mixins" as *;
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  background-color: $primary;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+
+  &__nav {
+    display: none;
+    @include tablet {
+      display: flex;
+      justify-content: flex-end;
+      flex: 1;
+    }
+
+    &.open {
+      display: flex;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: $primary;
+      width: 100%;
+      padding: 1.25rem 0;
+      box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+      z-index: 10;
+
+      .header__link {
+        display: block;
+        padding: 0.75rem 1.25rem;
+        font-size: 1rem;
+        color: $primary;
+        font-weight: bold;
+        background-color: $accent; /* Matching the background color of search button */
+        border-radius: 20px; /* Similar to the search button */
+        text-decoration: none;
+        text-align: center;
+
+        &:hover {
+          background-color: darken(
+            $accent,
+            10%
+          ); /* Slightly darken the color on hover */
+        }
+      }
+    }
+  }
+
+  &__logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: $primary;
+    text-decoration: none;
+    max-width: 300px;
+    @include tablet {
+      flex: 1;
+      text-align: left; /* Center logo on tablet and above */
+    }
+    & img {
+      max-width: 300px;
+    }
+  }
+
+  /* Mobile Hamburger Menu */
+  &__menu-toggle {
+    display: block;
+    cursor: pointer;
+    width: 30px;
+    height: 25px;
+    position: relative;
+
+    &.open {
+      .header__menu-icon {
+        transform: rotate(45deg);
+      }
+    }
+
+    .header__menu-icon {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: $accent;
+      transition: all 0.3s ease;
+      &:before,
+      &:after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 4px;
+        background-color: $accent;
+        transition: all 0.3s ease;
+      }
+      &:before {
+        top: -10px;
+      }
+      &:after {
+        top: 10px;
+      }
+    }
+  }
+
+  /* Tablet and Above */
+  @include tablet {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .header__menu-toggle {
+      display: none; /* Hide hamburger menu on tablet and above */
+    }
+
+    .header__nav {
+      display: flex;
+      justify-content: flex-end; /* Align nav items to the right */
+      flex: 1;
+    }
+
+    .header__logo {
+      text-align: left; /* Center logo on tablet */
+      flex: 1; /* Allow logo to take center position */
+      & img {
+        max-width: 300px;
+      }
+    }
+
+    .header__link {
+      padding: 0.75rem 1.25rem;
+      font-size: 1rem;
+      color: $background;
+      font-weight: bold;
+      text-decoration: none;
+      background-color: $accent; /* Matching the background color of search button */
+      border-radius: 20px; /* Similar to the search button */
+      margin-left: 1rem; /* Space between the links */
+
+      &:hover {
+        background-color: darken($accent, 10%); /* Darken the accent on hover */
+      }
+    }
+  }
+
+  /* Desktop and Above */
+  @include desktop {
+    .header__logo {
+      font-size: 2.5rem;
+    }
+  }
+}
