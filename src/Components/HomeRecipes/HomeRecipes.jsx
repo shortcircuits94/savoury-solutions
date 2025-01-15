@@ -1,8 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import axios from "axios"; // Import axios to make HTTP requests
 import "./HomeRecipes.scss";
 
 const HomeRecipes = ({ recipes, isFiltered }) => {
+  const addToFavorites = async (idMeal, strMeal, strMealThumb) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/favourites",
+        {
+          idMeal,
+          strMeal,
+          strMealThumb,
+        }
+      );
+      alert(response.data.message); // Show a success message
+    } catch (error) {
+      console.error("Error adding to favorites:", error);
+      alert("Failed to add recipe to favorites");
+    }
+  };
+
   return (
     <div className="home-recipes">
       <h2 className="home-recipes__title">
@@ -29,7 +47,18 @@ const HomeRecipes = ({ recipes, isFiltered }) => {
                   <h3 className="home-recipes__card-title">{recipe.strMeal}</h3>
                 </div>
               </Link>
-              <button className="home-recipes__heart">❤️</button>
+              <button
+                className="home-recipes__heart"
+                onClick={() =>
+                  addToFavorites(
+                    recipe.idMeal,
+                    recipe.strMeal,
+                    recipe.strMealThumb
+                  )
+                }
+              >
+                ❤️
+              </button>
             </div>
           ))
         ) : (
