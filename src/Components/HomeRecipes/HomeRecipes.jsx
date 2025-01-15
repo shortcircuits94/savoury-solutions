@@ -1,23 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios"; // Import axios to make HTTP requests
+import axios from "axios";
 import "./HomeRecipes.scss";
 
 const HomeRecipes = ({ recipes, isFiltered }) => {
-  const addToFavorites = async (idMeal, strMeal, strMealThumb) => {
+  const [favorites, setFavorites] = useState([]);
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/favourites");
+        setFavorites(response.data.map((fav) => fav.idMeal));
+      } catch (error) {
+        console.error("Error fetching favorites:", error);
+      }
+    };
+
+    fetchFavorites();
+  }, []);
+
+  const handleFavoriteClick = async (idMeal, strMeal, strMealThumb) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/favourites",
-        {
+      if (favorites.includes(idMeal)) {
+        await axios.delete(`http://localhost:5000/favourites/${idMeal}`);
+        setFavorites(favorites.filter((id) => id !== idMeal));
+      } else {
+        await axios.post("http://localhost:5000/favourites", {
           idMeal,
           strMeal,
           strMealThumb,
-        }
-      );
-      alert(response.data.message); // Show a success message
+        });
+        setFavorites([...favorites, idMeal]);
+      }
     } catch (error) {
-      console.error("Error adding to favorites:", error);
-      alert("Failed to add recipe to favorites");
+      console.error("Error handling favorite:", error);
     }
   };
 
@@ -47,17 +63,43 @@ const HomeRecipes = ({ recipes, isFiltered }) => {
                   <h3 className="home-recipes__card-title">{recipe.strMeal}</h3>
                 </div>
               </Link>
+
               <button
                 className="home-recipes__heart"
                 onClick={() =>
-                  addToFavorites(
+                  handleFavoriteClick(
                     recipe.idMeal,
                     recipe.strMeal,
                     recipe.strMealThumb
                   )
                 }
+                aria-label="Toggle Favorite"
               >
-                ❤️
+                {favorites.includes(recipe.idMeal) ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40"
+                    height="40"
+                    viewBox="0 0 24 24"
+                    fill="#ff5846"
+                  >
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40"
+                    height="40"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#ff5846"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                )}
               </button>
             </div>
           ))

@@ -22,11 +22,9 @@ Ingredient Input: Users can manually enter ingredients or select them from a pre
 
 Recipe Recommendations: The app will dynamically generate a list of recipes based on the selected ingredients.
 
-Filters: Users can apply filters such as cuisine type, dietary restrictions, or preparation time.
+Filters: Users can apply filters such as ingredient, and predefined categories.
 
-Exclusion Feature: Users can exclude specific ingredients (e.g., allergens) from recipe recommendations.
-
-Recipe Details: Each recipe includes step-by-step instructions, preparation time, and nutritional information.
+Recipe Details: Each recipe includes step-by-step instructions, and ingredients.
 
 Favourites: Users can save recipes for future reference.
 

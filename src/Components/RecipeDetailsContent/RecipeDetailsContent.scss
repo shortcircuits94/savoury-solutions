@@ -37,6 +37,13 @@
     }
   }
 
+  &__share-buttons {
+    margin-top: 10px; /* Adjust the space between image and buttons */
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
   &__info {
     flex: 1;
     display: flex;
@@ -46,6 +53,7 @@
     border-radius: 10px;
     background-color: $background;
     padding: 20px;
+
     .recipe-details__ingredients {
       list-style-type: none;
       padding: 0;
@@ -86,4 +94,19 @@
       }
     }
   }
+}
+
+.share-button {
+  background-color: #ff5722;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+}
+
+.share-button:hover {
+  background-color: #e64a19;
 }
