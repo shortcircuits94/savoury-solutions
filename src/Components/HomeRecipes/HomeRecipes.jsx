@@ -4,36 +4,58 @@ import axios from "axios";
 import "./HomeRecipes.scss";
 
 const HomeRecipes = ({ recipes, isFiltered }) => {
-  const [favorites, setFavorites] = useState([]);
+  const [favourites, setFavourites] = useState([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const fetchFavorites = async () => {
+    const fetchFavourites = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/favourites");
-        setFavorites(response.data.map((fav) => fav.idMeal));
+        const response = await axios.get(
+          "http://localhost:5000/users/favourites",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setFavourites(response.data.map((fav) => fav.idMeal));
       } catch (error) {
-        console.error("Error fetching favorites:", error);
+        console.error("Error fetching favourites:", error);
       }
     };
 
-    fetchFavorites();
-  }, []);
+    fetchFavourites();
+  }, [token]);
 
-  const handleFavoriteClick = async (idMeal, strMeal, strMealThumb) => {
+  const handleFavouriteClick = async (idMeal, strMeal, strMealThumb) => {
     try {
-      if (favorites.includes(idMeal)) {
-        await axios.delete(`http://localhost:5000/favourites/${idMeal}`);
-        setFavorites(favorites.filter((id) => id !== idMeal));
-      } else {
-        await axios.post("http://localhost:5000/favourites", {
-          idMeal,
-          strMeal,
-          strMealThumb,
+      console.log("Token: ", token);
+      if (favourites.includes(idMeal)) {
+        await axios.delete(`http://localhost:5000/users/favourites/${idMeal}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
-        setFavorites([...favorites, idMeal]);
+        setFavourites(favourites.filter((id) => id !== idMeal));
+      } else {
+        await axios.post(
+          "http://localhost:5000/users/favourites",
+          {
+            idMeal,
+            strMeal,
+            strMealThumb,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setFavourites([...favourites, idMeal]);
       }
     } catch (error) {
-      console.error("Error handling favorite:", error);
+      console.error("Error handling favourite:", error);
     }
   };
 
@@ -67,15 +89,15 @@ const HomeRecipes = ({ recipes, isFiltered }) => {
               <button
                 className="home-recipes__heart"
                 onClick={() =>
-                  handleFavoriteClick(
+                  handleFavouriteClick(
                     recipe.idMeal,
                     recipe.strMeal,
                     recipe.strMealThumb
                   )
                 }
-                aria-label="Toggle Favorite"
+                aria-label="Toggle Favourite"
               >
-                {favorites.includes(recipe.idMeal) ? (
+                {favourites.includes(recipe.idMeal) ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="40"

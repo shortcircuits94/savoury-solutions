@@ -7,33 +7,33 @@
   width: 100%;
   height: auto;
   text-align: center;
-  padding: 1.25rem 0;
-  background-image: url("../../assets/Images/background.jpg");
-  background-size: cover;
-  background-position: center;
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: inherit;
-    filter: blur(10px);
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: -1;
-  }
-  @include tablet {
-    padding: 2.5rem 0;
-  }
+  &__background {
+    background-image: url("../../assets/Images/background.jpg");
+    background-size: cover;
+    background-position: center;
 
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+      pointer-events: none;
+    }
+    @include tablet {
+      padding: 2.5rem 0;
+    }
+  }
   &__title {
     font-size: 2rem;
     color: $primary;
     margin: 0;
     padding: 0.625rem;
     font-weight: bold;
-    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 2;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
   }
 
@@ -48,6 +48,7 @@
     padding: 0.5rem 0.75rem;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 30px;
+    z-index: 2;
     @include tablet {
       width: 50%;
     }
@@ -59,6 +60,7 @@
     border: none;
     border-radius: 20px;
     font-size: 1rem;
+    z-index: 2;
   }
 
   &__search-button {
@@ -68,6 +70,7 @@
     color: white;
     border-radius: 20px;
     margin-left: 0.5rem;
+    z-index: 2;
     cursor: pointer;
 
     &:hover {
@@ -82,7 +85,7 @@
     margin-top: 6.25rem;
     gap: 0.5rem;
     font-size: 1rem;
-
+    z-index: 2;
     .home-header__tag {
       background-color: rgba(255, 255, 255, 0.7);
       padding: 0.3125rem 1rem;
@@ -90,6 +93,7 @@
       display: inline-flex;
       align-items: center;
       font-weight: bold;
+      z-index: 2;
       color: #333;
     }
 
@@ -100,6 +104,7 @@
       font-weight: bold;
       margin-left: 0.3125rem;
       cursor: pointer;
+      z-index: 2;
 
       &:hover {
         color: $accent;
@@ -109,12 +114,14 @@
 
   /* Style for the category buttons (Vegan and Vegetarian) */
   &__category-button {
+    z-index: 2;
+
     padding: 0.625rem 1rem;
     border: none;
     background-color: $accent;
     color: white;
     border-radius: 20px;
-    margin: 0.5rem;
+    margin: 1rem;
     font-size: 1rem;
     cursor: pointer;
 

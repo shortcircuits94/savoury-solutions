@@ -9,7 +9,9 @@ const FavouritesRecipes = () => {
   useEffect(() => {
     const fetchFavourites = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/favourites");
+        const response = await axios.get(
+          "http://localhost:5000/users/favourites"
+        );
         setFavourites(response.data);
       } catch (error) {
         console.error("Error fetching favourites:", error);
@@ -19,18 +21,29 @@ const FavouritesRecipes = () => {
     fetchFavourites();
   }, []);
 
-  const handleFavoriteClick = async (idMeal, strMeal, strMealThumb) => {
+  const handleFavouriteClick = async (idMeal) => {
+    const token = localStorage.getItem("authToken");
     try {
-      if (favourites.some((fav) => fav.idMeal === idMeal)) {
-        await axios.delete(`http://localhost:5000/favourites/${idMeal}`);
-        setFavourites(favourites.filter((fav) => fav.idMeal !== idMeal));
-      } else {
-        await axios.post("http://localhost:5000/favourites", {
-          idMeal,
-          strMeal,
-          strMealThumb,
+      if (favourites.includes(idMeal)) {
+        await axios.delete(`http://localhost:5000/favourites/${idMeal}`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        setFavourites([...favourites, { idMeal, strMeal, strMealThumb }]);
+
+        setFavourites(favourites.filter((id) => id !== idMeal));
+      } else {
+        await axios.post(
+          "http://localhost:5000/favourites",
+          {
+            recipe_id: idMeal,
+            recipe_name: recipe.strMeal,
+            recipe_image: recipe.strMealThumb,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        setFavourites([...favourites, idMeal]);
       }
     } catch (error) {
       console.error("Error handling favourite:", error);

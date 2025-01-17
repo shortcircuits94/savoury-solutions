@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120">
+  <!-- Simple bowl -->
+  <path d="M80 80 
+           C80 80, 150 80, 220 80
+           C220 80, 230 40, 150 40
+           C70 40, 80 80, 80 80" 
+        fill="none"
+        stroke="#ff5846"
+        stroke-width="4"/>
+  
+  <!-- Clear steam wisps -->
+  <path d="M130 35 C130 25, 140 25, 140 15
+           M150 35 C150 25, 160 25, 160 15
+           M170 35 C170 25, 180 25, 180 15"
+        stroke="#ff5846"
+        fill="none"
+        stroke-width="3"
+        stroke-linecap="round"/>
+  
+  <!-- Company name -->
+  <text x="150" y="110" 
+        font-family="Arial" 
+        font-weight="bold" 
+        font-size="24" 
+        fill="#ff5846"
+        text-anchor="middle">
+    Savoury Solutions
+  </text>
+</svg>

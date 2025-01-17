@@ -9,12 +9,13 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState([]);
-  const [randomRecipes, setRandomRecipes] = useState([]); // Store multiple random recipes
+  const [randomRecipes, setRandomRecipes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isFiltered, setIsFiltered] = useState(false);
+  const [favourites, setFavourites] = useState([]);
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    // Fetch categories
     axios
       .get("https://www.themealdb.com/api/json/v1/1/categories.php")
       .then((response) => {
@@ -26,23 +27,36 @@ const Home = () => {
       })
       .catch((error) => console.error("Error fetching categories:", error));
 
-    // Fetch 6 random recipes when the page loads
     fetchRandomRecipes();
+
+    fetchFavourites();
   }, []);
 
   const fetchRandomRecipes = () => {
-    // Make 6 separate API calls to get random recipes
     const randomRecipeRequests = Array.from({ length: 6 }, () =>
       axios.get("https://www.themealdb.com/api/json/v1/1/random.php")
     );
 
-    // Use Promise.all to fetch all random recipes at once
     Promise.all(randomRecipeRequests)
       .then((responses) => {
         const recipes = responses.map((response) => response.data.meals[0]);
-        setRandomRecipes(recipes); // Store 6 random recipes
+        setRandomRecipes(recipes);
       })
       .catch((error) => console.error("Error fetching random recipes:", error));
+  };
+
+  const fetchFavourites = () => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      axios
+        .get("http://localhost:5000/users/favourites", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          setFavourites(response.data.map((fav) => fav.recipeId));
+        })
+        .catch((error) => console.error("Error fetching favourites:", error));
+    }
   };
 
   const handleSearchChange = (e) => {
@@ -107,6 +121,34 @@ const Home = () => {
         console.error("Error fetching category recipes:", error)
       );
   };
+  const handleFavouriteClick = async (idMeal, recipeName, recipeImage) => {
+    const token = localStorage.getItem("authToken");
+    try {
+      if (favourites.includes(idMeal)) {
+        await axios.delete(`http://localhost:5000/favourites/${idMeal}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setFavourites(favourites.filter((id) => id !== idMeal));
+      } else {
+        await axios.post(
+          "http://localhost:5000/favourites",
+          {
+            recipe_id: idMeal,
+            recipe_name: recipeName,
+            recipe_image: recipeImage,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        setFavourites([...favourites, idMeal]);
+      }
+    } catch (error) {
+      console.error("Error handling favourite:", error);
+    }
+  };
 
   return (
     <div className="home">
@@ -122,11 +164,19 @@ const Home = () => {
 
       {/* Display 6 random recipes */}
       {!isFiltered && randomRecipes.length > 0 && (
-        <HomeRecipes recipes={randomRecipes} />
+        <HomeRecipes
+          recipes={randomRecipes}
+          favourites={favourites}
+          onFavouriteClick={handleFavouriteClick}
+        />
       )}
 
       {/* Show filtered recipes */}
-      <HomeRecipes recipes={filteredRecipes} />
+      <HomeRecipes
+        recipes={filteredRecipes}
+        favourites={favourites}
+        onFavouriteClick={handleFavouriteClick}
+      />
     </div>
   );
 };
