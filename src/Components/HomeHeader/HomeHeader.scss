@@ -114,7 +114,6 @@
     }
   }
 
-  /* Style for the category buttons (Vegan and Vegetarian) */
   &__category-button {
     z-index: 2;
     position: relative;
@@ -131,8 +130,6 @@
       background-color: $accent;
     }
   }
-
-  /* Desktop and tablet adjustments */
   @mixin tablet {
     @media screen and (min-width: $tablet-breakpoint) {
       .home-header__title {

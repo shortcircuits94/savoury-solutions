@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import HomeHeader from "../../Components/HomeHeader/HomeHeader";
 import HomeRecipes from "../../Components/HomeRecipes/HomeRecipes";
 import "./Home.scss";
@@ -133,13 +132,11 @@ const Home = () => {
   const handleFavouriteClick = async (idMeal, strMeal, strMealThumb) => {
     try {
       if (favourites.includes(idMeal)) {
-        // If already favorited, remove it.
         await axios.delete(`http://localhost:5000/users/favourites/${idMeal}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFavourites(favourites.filter((id) => id !== idMeal));
       } else {
-        // Add to favorites if not already present.
         const requestData = {
           recipe_id: idMeal,
           recipe_name: strMeal,
@@ -177,7 +174,6 @@ const Home = () => {
         onCategorySelect={handleCategorySelect}
       />
 
-      {/* Display 6 random recipes */}
       {!isFiltered && randomRecipes.length > 0 && (
         <HomeRecipes
           recipes={randomRecipes}
@@ -186,9 +182,9 @@ const Home = () => {
         />
       )}
 
-      {/* Show filtered recipes */}
       <HomeRecipes
         recipes={filteredRecipes}
+        isFiltered={isFiltered}
         favourites={favourites}
         onFavouriteClick={handleFavouriteClick}
       />
