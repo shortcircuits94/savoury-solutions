@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import "./Login.scss";
 import api from "../../api";
 
@@ -7,19 +7,30 @@ const LoginCom = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await api.post("/users/login", { email, password });
-      localStorage.setItem("authToken", data.authToken);
+    setError("");
 
-      onLoginSuccess(); // If needed, execute additional actions here
-      navigate("/favourites"); // Redirect to /favourites after successful login
+    try {
+      const response = await api.post("/users/login", { email, password });
+      const token = response.data.token || response.data.authToken;
+
+      if (!token) {
+        throw new Error("No token received from server");
+      }
+
+      localStorage.setItem("authToken", token);
+      onLoginSuccess(); // Call this before navigation
+      navigate("/favourites");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      console.error("Login error:", err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Login failed. Please check your credentials and try again."
+      );
     }
   };
 

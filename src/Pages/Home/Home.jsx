@@ -47,16 +47,25 @@ const Home = () => {
 
   const fetchFavourites = () => {
     const token = localStorage.getItem("authToken");
-    if (token) {
-      axios
-        .get("http://localhost:5000/users/favourites", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          setFavourites(response.data.map((fav) => fav.recipeId));
-        })
-        .catch((error) => console.error("Error fetching favourites:", error));
+    if (!token) {
+      console.error("No token found");
+      return;
     }
+
+    axios
+      .get("http://localhost:5000/users/favourites", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setFavourites(response.data.map((fav) => fav.recipeId));
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 403) {
+          console.error("Unauthorized access - please login again");
+        } else {
+          console.error("Error fetching favourites:", error);
+        }
+      });
   };
 
   const handleSearchChange = (e) => {
@@ -121,32 +130,38 @@ const Home = () => {
         console.error("Error fetching category recipes:", error)
       );
   };
-  const handleFavouriteClick = async (idMeal, recipeName, recipeImage) => {
-    const token = localStorage.getItem("authToken");
+  const handleFavouriteClick = async (idMeal, strMeal, strMealThumb) => {
     try {
       if (favourites.includes(idMeal)) {
-        await axios.delete(`http://localhost:5000/favourites/${idMeal}`, {
+        // If already favorited, remove it.
+        await axios.delete(`http://localhost:5000/users/favourites/${idMeal}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         setFavourites(favourites.filter((id) => id !== idMeal));
       } else {
-        await axios.post(
-          "http://localhost:5000/favourites",
+        // Add to favorites if not already present.
+        const requestData = {
+          recipe_id: idMeal,
+          recipe_name: strMeal,
+          recipe_image: strMealThumb,
+        };
+        const response = await axios.post(
+          "http://localhost:5000/users/favourites",
+          requestData,
           {
-            recipe_id: idMeal,
-            recipe_name: recipeName,
-            recipe_image: recipeImage,
-          },
-          {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
         );
-
-        setFavourites([...favourites, idMeal]);
+        if (response.data) setFavourites([...favourites, idMeal]);
       }
     } catch (error) {
       console.error("Error handling favourite:", error);
+      if (error.response?.status === 400) {
+        alert(`Failed to add favorite: ${error.response.data.msg}`);
+      }
     }
   };
 

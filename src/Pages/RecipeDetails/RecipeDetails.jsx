@@ -1,68 +1,109 @@
-// src/pages/RecipeDetails.jsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import RecipeDetailsContent from "../../Components/RecipeDetailsContent/RecipeDetailsContent";
 
 const RecipeDetails = () => {
-  const [favourites, setFavourites] = useState([]); // Store the user's favorites
-  const { id } = useParams(); // Get the recipe ID from the URL
+  const [favourites, setFavourites] = useState([]);
   const [recipe, setRecipe] = useState(null);
-  const fetchFavourites = () => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      axios
-        .get("http://localhost:5000/users/favourites", {
+  const [isLoading, setIsLoading] = useState(true);
+  const { id } = useParams();
+  const token = localStorage.getItem("authToken");
+
+  const fetchFavourites = async () => {
+    if (!token) {
+      setFavourites([]);
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/users/favourites",
+        {
           headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => {
-          setFavourites(response.data.map((fav) => fav.recipeId)); // Store favorite recipe IDs
-        })
-        .catch((error) => console.error("Error fetching favourites:", error));
+        }
+      );
+      setFavourites(response.data);
+    } catch (error) {
+      console.error("Error fetching favourites:", error);
+      setFavourites([]);
     }
   };
 
-  const handleFavouriteClick = async (idMeal) => {
-    const token = localStorage.getItem("authToken");
+  const isRecipeInFavorites = (recipeId) => {
+    return favourites.some((fav) => String(fav.recipe_id) === String(recipeId));
+  };
+
+  const handleFavouriteClick = async (idMeal, strMeal, strMealThumb) => {
+    if (!token) {
+      alert("Please log in to save favorites");
+      return;
+    }
+
     try {
-      // Check if the meal is already in the favorites
-      if (favourites.includes(idMeal)) {
-        // Remove from favorites
+      if (isRecipeInFavorites(idMeal)) {
         await axios.delete(`http://localhost:5000/users/favourites/${idMeal}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        setFavourites(favourites.filter((id) => id !== idMeal)); // Update state
+        setFavourites((prevFavourites) =>
+          prevFavourites.filter(
+            (fav) => String(fav.recipe_id) !== String(idMeal)
+          )
+        );
       } else {
-        // Add to favorites
-        await axios.post(
+        const requestData = {
+          recipe_id: idMeal,
+          recipe_name: strMeal,
+          recipe_image: strMealThumb,
+        };
+
+        const response = await axios.post(
           "http://localhost:5000/users/favourites",
-          { recipeId: idMeal },
+          requestData,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
         );
 
-        setFavourites([...favourites, idMeal]); // Update state
+        if (response.data) {
+          const newFavorite = {
+            recipe_id: idMeal,
+            recipe_name: strMeal,
+            recipe_image: strMealThumb,
+          };
+          setFavourites((prevFavourites) => [...prevFavourites, newFavorite]);
+        }
       }
     } catch (error) {
       console.error("Error handling favourite:", error);
+      await fetchFavourites();
     }
   };
 
   useEffect(() => {
-    const fetchRecipeDetails = async () => {
+    const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await axios.get(
+        const recipeResponse = await axios.get(
           `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
         );
-        setRecipe(response.data.meals[0]);
+
+        if (recipeResponse.data.meals) {
+          setRecipe(recipeResponse.data.meals[0]);
+        }
+
+        await fetchFavourites();
       } catch (error) {
-        console.error("Error fetching recipe details:", error);
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchRecipeDetails();
+    fetchData();
   }, [id]);
 
   if (!recipe) return <div>Loading...</div>;
@@ -71,7 +112,7 @@ const RecipeDetails = () => {
     <div className="recipe-details-page">
       <RecipeDetailsContent
         recipe={recipe}
-        favourites={favourites}
+        isFavourite={isRecipeInFavorites(recipe.idMeal)}
         onFavouriteClick={handleFavouriteClick}
       />
     </div>
