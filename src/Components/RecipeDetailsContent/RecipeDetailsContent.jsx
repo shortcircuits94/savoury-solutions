@@ -48,9 +48,7 @@ const RecipeDetailsContent = ({ recipe, isFavourite, onFavouriteClick }) => {
               </svg>
             )}
           </button>
-          {/* Sharing Buttons */}
           <div className="recipe-details__share-buttons">
-            {/* Facebook Share Button */}
             <a
               href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
               target="_blank"
@@ -59,7 +57,6 @@ const RecipeDetailsContent = ({ recipe, isFavourite, onFavouriteClick }) => {
             >
               <button className="share-button">Share on Facebook</button>
             </a>
-            {/* Pinterest Share Button */}
             <a
               href={`https://www.pinterest.com/pin/create/button/?url=${shareUrl}&media=${encodeURIComponent(
                 recipe.strMealThumb

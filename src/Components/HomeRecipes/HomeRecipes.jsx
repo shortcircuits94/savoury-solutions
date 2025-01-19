@@ -1,64 +1,7 @@
-import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import "./HomeRecipes.scss";
 
-const HomeRecipes = ({ recipes, isFiltered }) => {
-  const [favourites, setFavourites] = useState([]);
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    const fetchFavourites = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/users/favourites",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setFavourites(response.data.map((fav) => fav.idMeal));
-      } catch (error) {
-        console.error("Error fetching favourites:", error);
-      }
-    };
-
-    fetchFavourites();
-  }, [token]);
-
-  const handleFavouriteClick = async (idMeal, strMeal, strMealThumb) => {
-    try {
-      console.log("Token: ", token);
-      if (favourites.includes(idMeal)) {
-        await axios.delete(`http://localhost:5000/users/favourites/${idMeal}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setFavourites(favourites.filter((id) => id !== idMeal));
-      } else {
-        await axios.post(
-          "http://localhost:5000/users/favourites",
-          {
-            idMeal,
-            strMeal,
-            strMealThumb,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setFavourites([...favourites, idMeal]);
-      }
-    } catch (error) {
-      console.error("Error handling favourite:", error);
-    }
-  };
-
+const HomeRecipes = ({ recipes, isFiltered, favourites, onFavouriteClick }) => {
   return (
     <div className="home-recipes">
       <h2 className="home-recipes__title">
@@ -89,7 +32,7 @@ const HomeRecipes = ({ recipes, isFiltered }) => {
               <button
                 className="home-recipes__heart"
                 onClick={() =>
-                  handleFavouriteClick(
+                  onFavouriteClick(
                     recipe.idMeal,
                     recipe.strMeal,
                     recipe.strMealThumb

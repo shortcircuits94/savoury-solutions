@@ -31,6 +31,8 @@
     font-size: 2rem;
     color: $primary;
     margin: 0;
+    position: relative;
+
     padding: 0.625rem;
     font-weight: bold;
     z-index: 2;
@@ -112,10 +114,9 @@
     }
   }
 
-  /* Style for the category buttons (Vegan and Vegetarian) */
   &__category-button {
     z-index: 2;
-
+    position: relative;
     padding: 0.625rem 1rem;
     border: none;
     background-color: $accent;
@@ -129,8 +130,6 @@
       background-color: $accent;
     }
   }
-
-  /* Desktop and tablet adjustments */
   @mixin tablet {
     @media screen and (min-width: $tablet-breakpoint) {
       .home-header__title {
