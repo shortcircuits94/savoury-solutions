@@ -1,39 +1,9 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./Register.scss";
-import api from "../../api";
 
-const Register = ({ onRegisterSuccess }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await api.post("/users/register", formData);
-      console.log("Registration successful", response.data);
-
-      localStorage.setItem("authToken", response.data.authToken);
-      onRegisterSuccess();
-      navigate("/favourites");
-    } catch (err) {
-      setError(err.response?.data?.msg || "Registration failed");
-    }
-  };
-
+const Register = ({ formData, error, onInputChange, onSubmit }) => {
   return (
     <div className="register">
-      <form className="register__form" onSubmit={handleSubmit}>
+      <form className="register__form" onSubmit={onSubmit}>
         <h2 className="register__title">Register</h2>
         {error && <p className="register__error">{error}</p>}
         <input
@@ -42,7 +12,7 @@ const Register = ({ onRegisterSuccess }) => {
           className="register__input"
           placeholder="Name"
           value={formData.name}
-          onChange={handleInputChange}
+          onChange={onInputChange}
           required
         />
         <input
@@ -51,7 +21,7 @@ const Register = ({ onRegisterSuccess }) => {
           className="register__input"
           placeholder="Email"
           value={formData.email}
-          onChange={handleInputChange}
+          onChange={onInputChange}
           required
         />
         <input
@@ -60,7 +30,7 @@ const Register = ({ onRegisterSuccess }) => {
           className="register__input"
           placeholder="Password"
           value={formData.password}
-          onChange={handleInputChange}
+          onChange={onInputChange}
           required
         />
         <button type="submit" className="register__button">

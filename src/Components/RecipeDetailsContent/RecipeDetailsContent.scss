@@ -1,5 +1,6 @@
 @use "../../styles/partials/variables" as *;
-
+@use "../../styles/partials/fonts" as *;
+@use "../../Styles/Partials/mixins" as *;
 .recipe-details {
   padding: 1rem;
   position: relative;
@@ -38,7 +39,7 @@
     flex-direction: column;
     gap: 20px;
 
-    @media (min-width: 768px) {
+    @include tablet {
       flex-direction: row;
       justify-content: space-between;
     }
@@ -87,7 +88,7 @@
         color: $text;
         text-transform: capitalize;
 
-        @media (min-width: 768px) {
+        @include tablet {
           font-size: 1.2rem;
         }
       }
@@ -108,7 +109,7 @@
     p {
       line-height: 1.5;
       margin-bottom: 10px;
-      @media (min-width: 768px) {
+      @include tablet {
         font-size: 1.2rem;
       }
     }

@@ -1,4 +1,3 @@
-import React from "react";
 import "./RecipeDetailsContent.scss";
 
 const RecipeDetailsContent = ({ recipe, isFavourite, onFavouriteClick }) => {
