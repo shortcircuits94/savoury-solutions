@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginCom from "../../Components/LoginCom/LoginCom";
 import api from "../../api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,11 +16,21 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await api.post("/users/login", { email, password });
+      const { data } = await api.post(
+        `${API_BASE_URL}/login`,
+        { email, password },
+        {
+          timeout: 30000,
+        }
+      );
       localStorage.setItem("authToken", data.authToken);
       navigate("/favourites");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      if (err.code === "ECONNABORTED") {
+        setError("API request timed out");
+      } else {
+        setError(err.response?.data?.message || "Login failed");
+      }
     }
   };
 

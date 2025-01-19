@@ -3,6 +3,7 @@ import axios from "axios";
 import HomeHeader from "../../Components/HomeHeader/HomeHeader";
 import HomeRecipes from "../../Components/HomeRecipes/HomeRecipes";
 import "./Home.scss";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -52,7 +53,7 @@ const Home = () => {
     }
 
     axios
-      .get("http://localhost:5000/users/favourites", {
+      .get(`${API_BASE_URL}/favourites`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -130,34 +131,28 @@ const Home = () => {
       );
   };
   const handleFavouriteClick = async (idMeal, strMeal, strMealThumb) => {
-    try {
-      if (favourites.includes(idMeal)) {
-        await axios.delete(`http://localhost:5000/users/favourites/${idMeal}`, {
+    if (favourites.includes(idMeal)) {
+      setFavourites(favourites.filter((id) => id !== idMeal));
+      try {
+        await axios.delete(`${API_BASE_URL}/favourites/${idMeal}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setFavourites(favourites.filter((id) => id !== idMeal));
-      } else {
+      } catch (error) {
+        console.error("Error removing favourite:", error);
+      }
+    } else {
+      setFavourites([...favourites, idMeal]);
+      try {
         const requestData = {
           recipe_id: idMeal,
           recipe_name: strMeal,
           recipe_image: strMealThumb,
         };
-        const response = await axios.post(
-          "http://localhost:5000/users/favourites",
-          requestData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (response.data) setFavourites([...favourites, idMeal]);
-      }
-    } catch (error) {
-      console.error("Error handling favourite:", error);
-      if (error.response?.status === 400) {
-        alert(`Failed to add favorite: ${error.response.data.msg}`);
+        await axios.post(`${API_BASE_URL}/favourites`, requestData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch (error) {
+        console.error("Error adding favourite:", error);
       }
     }
   };

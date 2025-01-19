@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import RecipeDetailsContent from "../../Components/RecipeDetailsContent/RecipeDetailsContent";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const RecipeDetails = () => {
   const [favourites, setFavourites] = useState([]);
@@ -17,12 +18,9 @@ const RecipeDetails = () => {
     }
 
     try {
-      const response = await axios.get(
-        "http://localhost:5000/users/favourites",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(`${API_BASE_URL}/favourites`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setFavourites(response.data);
     } catch (error) {
       console.error("Error fetching favourites:", error);
@@ -42,7 +40,7 @@ const RecipeDetails = () => {
 
     try {
       if (isRecipeInFavorites(idMeal)) {
-        await axios.delete(`http://localhost:5000/users/favourites/${idMeal}`, {
+        await axios.delete(`${API_BASE_URL}/favourites/${idMeal}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFavourites((prevFavourites) =>
@@ -58,7 +56,7 @@ const RecipeDetails = () => {
         };
 
         const response = await axios.post(
-          "http://localhost:5000/users/favourites",
+          "${API_BASE_URL}/users/favourites",
           requestData,
           {
             headers: {
