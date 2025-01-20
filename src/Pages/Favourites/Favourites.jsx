@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 import FavouriteRecipes from "../../Components/FavouriteRecipes/FavouriteRecipes";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -13,7 +15,7 @@ const FavouritesPage = () => {
 
   const fetchFavourites = async () => {
     if (!token) {
-      console.error;
+      console.error("Token is missing, cannot fetch favourites.");
       return;
     }
 
@@ -40,10 +42,18 @@ const FavouritesPage = () => {
         await axios.delete(`${API_BASE_URL}/favourites/${recipeId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setFavourites(favourites.filter((fav) => fav.recipe_id !== recipeId));
       } else {
-        alert("This recipe is no longer a favourite.");
+        await axios.post(
+          `${API_BASE_URL}/favourites`,
+          { recipe_id: recipeId },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
       }
+
+      // Refresh the list
+      fetchFavourites();
     } catch (error) {
       console.error("Error handling favourite:", error);
       if (error.response?.status === 403) {

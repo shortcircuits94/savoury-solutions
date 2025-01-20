@@ -1,7 +1,13 @@
+import React from "react";
 import "./RecipeDetailsContent.scss";
 
 const RecipeDetailsContent = ({ recipe, isFavourite, onFavouriteClick }) => {
-  const instructions = recipe.strInstructions.split("\n").filter(Boolean);
+  if (!recipe) {
+    return <div className="recipe-details">Loading recipe...</div>;
+  }
+
+  const instructions =
+    recipe.strInstructions?.split("\n").filter(Boolean) || [];
   const shareUrl = encodeURIComponent(window.location.href);
 
   return (
