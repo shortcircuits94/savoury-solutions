@@ -64,9 +64,9 @@ Mockups will include:
 
 Ingredient input form on the home page.
 
-Recipe results displayed as cards with images and brief descriptions.
+Recipe results displayed as cards with images and names.
 
-Recipe details page with step-by-step instructions and nutritional information.
+Recipe details page with step-by-step instructions and ingredients.
 
 Favourites page with saved recipes.
 
@@ -74,29 +74,29 @@ Favourites page with saved recipes.
 
 Ingredients: List of user-inputted ingredients.
 
-Recipes: Data from the MealDB, including name, ingredients, instructions, preparation time, and dietary information.
+Recipes: Data from the MealDB, including name, ingredients, instructions.
 
-Users: User data for saved recipes and preferences.
+Users: User data for saved recipes.
 
 Start planning what database tables
 
 ### Endpoints
 
-GET /api/recipes: Fetch recipes based on selected ingredients.
+GET /users/recipes: Fetch recipes based on selected ingredients.
 
 - Parameters: ingredients (array), exclude (array)
 - Response: JSON object with a list of recipes.
 
-POST /api/favourites: Save a recipe to the user's favourites.
+POST /users/favourites: Save a recipe to the user's favourites.
 
 - Body: Recipe ID
 - Response: Success message.
 
-GET /api/favourites: Retrieve a user's saved recipes.
+GET /users/favourites: Retrieve a user's saved recipes.
 
 - Response: JSON object with saved recipes.
 
-DELETE /api/favourites/:id: Remove a recipe from favourites.
+DELETE /users/favourites/:id: Remove a recipe from favourites.
 
 - Response: Success message.
 
@@ -140,6 +140,5 @@ Offline Mode: Allow users to access saved recipes without an internet connection
 
 Custom Recipe Submission: Let users add their own recipes to the database.
 
-notes:
-dont prioritize Authentication if it goes well I can add it
+
 ![alt text](Wireframes.png)
