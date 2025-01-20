@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await api.post(
-        `${API_BASE_URL}/login`,
+        `${API_BASE_URL}/users/login`,
         { email, password },
         {
           timeout: 30000,

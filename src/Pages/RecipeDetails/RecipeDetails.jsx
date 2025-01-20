@@ -19,7 +19,7 @@ const RecipeDetails = () => {
     }
 
     try {
-      const response = await axios.get(`${API_BASE_URL}/favourites`, {
+      const response = await axios.get(`${API_BASE_URL}/users/favourites`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFavourites(response.data);
@@ -49,7 +49,7 @@ const RecipeDetails = () => {
           )
         );
 
-        await axios.delete(`${API_BASE_URL}/favourites/${idMeal}`, {
+        await axios.delete(`${API_BASE_URL}/users/favourites/${idMeal}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
@@ -67,7 +67,7 @@ const RecipeDetails = () => {
           recipe_image: strMealThumb,
         };
 
-        await axios.post(`${API_BASE_URL}/favourites`, requestData, {
+        await axios.post(`${API_BASE_URL}/users/favourites`, requestData, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

@@ -20,9 +20,13 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post(`${API_BASE_URL}/register`, formData, {
-        timeout: 30000,
-      });
+      const response = await api.post(
+        `${API_BASE_URL}/users/register`,
+        formData,
+        {
+          timeout: 30000,
+        }
+      );
 
       localStorage.setItem("authToken", response.data.authToken);
 

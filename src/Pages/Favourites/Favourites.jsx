@@ -20,7 +20,7 @@ const FavouritesPage = () => {
     }
 
     try {
-      const response = await axios.get(`${API_BASE_URL}/favourites`, {
+      const response = await axios.get(`${API_BASE_URL}/users/favourites`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFavourites(response.data);
@@ -39,12 +39,12 @@ const FavouritesPage = () => {
       const isFavourite = favourites.some((fav) => fav.recipe_id === recipeId);
 
       if (isFavourite) {
-        await axios.delete(`${API_BASE_URL}/favourites/${recipeId}`, {
+        await axios.delete(`${API_BASE_URL}/users/favourites/${recipeId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
         await axios.post(
-          `${API_BASE_URL}/favourites`,
+          `${API_BASE_URL}/users/favourites`,
           { recipe_id: recipeId },
           {
             headers: { Authorization: `Bearer ${token}` },

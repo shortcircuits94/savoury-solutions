@@ -53,7 +53,7 @@ const Home = () => {
     }
 
     axios
-      .get(`${API_BASE_URL}/favourites`, {
+      .get(`${API_BASE_URL}/users/favourites`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -134,7 +134,7 @@ const Home = () => {
     if (favourites.includes(idMeal)) {
       setFavourites(favourites.filter((id) => id !== idMeal));
       try {
-        await axios.delete(`${API_BASE_URL}/favourites/${idMeal}`, {
+        await axios.delete(`${API_BASE_URL}/users/favourites/${idMeal}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } catch (error) {
@@ -148,7 +148,7 @@ const Home = () => {
           recipe_name: strMeal,
           recipe_image: strMealThumb,
         };
-        await axios.post(`${API_BASE_URL}/favourites`, requestData, {
+        await axios.post(`${API_BASE_URL}/users/favourites`, requestData, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } catch (error) {
