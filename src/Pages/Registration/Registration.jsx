@@ -23,8 +23,10 @@ const Registration = () => {
       const response = await api.post(`${API_BASE_URL}/register`, formData, {
         timeout: 30000,
       });
+
       localStorage.setItem("authToken", response.data.authToken);
-      navigate("/favourites");
+
+      navigate("/login");
     } catch (err) {
       if (err.code === "ECONNABORTED") {
         setError("API request timed out");
@@ -33,6 +35,7 @@ const Registration = () => {
       }
     }
   };
+
   return (
     <div className="login">
       <Register
