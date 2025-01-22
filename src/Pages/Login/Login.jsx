@@ -16,13 +16,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await api.post(
-        `${API_BASE_URL}/users/login`,
-        { email, password },
-        {
-          timeout: 30000,
-        }
-      );
+      const { data } = await api.post(`${API_BASE_URL}/users/login`, {
+        email,
+        password,
+      });
       localStorage.setItem("authToken", data.authToken);
       navigate("/favourites");
     } catch (err) {
